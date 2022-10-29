@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{files|length}} 个文件</title>
+    <link rel="shortcut icon" href="../static/favicon.ico" />
+    <link rel="stylesheet" href="../static/materialize.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <script src="../static/materialize.min.js"></script>
+  </head>
+  <body class="red lighten-3">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+          <a href="/upload" class="waves-effect waves-light btn center"
+            ><i class="material-icons left">file_upload</i>上传新文件</a
+          >
+        </div>
+        {% for file in files %}
+        <div class="col s12">
+          <div class="card blue-grey">
+            <div class="card-content white-text">
+              <p>
+                文件名: <span class="lime-text text-lighten-1">{{file}}</span>
+              </p>
+              <p>
+                文件大小:
+                <span class="indigo-text text-lighten-4"
+                  >{{'{:.2f}'.format(os.stat('{}/{}'.format(storage,
+                  file)).st_size/(1024*1024))}}MB</span
+                >
+              </p>
+              <p>
+                最后修改时间:
+                <span class="amber-text text-darken-1"
+                  >{{datetime.fromtimestamp(os.stat('{}/{}'.format(storage,
+                  file))[stat.ST_MTIME])}}</span
+                >
+              </p>
+            </div>
+            <div class="card-action">
+              <a href="/view/{{file}}"
+                ><i class="material-icons blue-text text-lighten-2"
+                  >insert_drive_file</i
+                ></a
+              >
+              <a href="/download/{{file}}"
+                ><i class="material-icons grey-text text-lighten-2"
+                  >file_download</i
+                ></a
+              >
+              <a href="/delete/{{file}}"
+                ><i class="material-icons red-text text-lighten-1">delete</i></a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>
