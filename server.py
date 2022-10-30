@@ -55,5 +55,29 @@ def upload():
             return redirect(url_for('index'))
     return render_template('upload.html')
 
-os.makedirs('storage',exist_ok=True)
+
+@app.route('/clipboard', methods=['GET', 'POST'])
+def clipboard():
+    if request.method == 'POST':
+        with open('clipboard/text.txt', 'w', encoding='utf-8') as f:
+            print(request.form['input'].split('\r'))
+            f.writelines(request.form['input'].split('\r'))
+        return redirect(request.url)
+    with open('clipboard/text.txt', 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+    return render_template('clipboard.html', lines=lines)
+
+
+@app.route('/clear')
+def clear():
+    with open('clipboard/text.txt', 'w', encoding='utf-8') as f:
+        f.write('')
+    return redirect(url_for('clipboard'))
+
+
+os.makedirs('storage', exist_ok=True)
+os.makedirs('clipboard', exist_ok=True)
+if not os.path.exists('clipboard/text.txt'):
+    with open('clipboard/text.txt', 'x') as f:
+        f.close()
 app.run(port=8888, host='0.0.0.0', debug=True)

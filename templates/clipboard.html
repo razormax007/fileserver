@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>文本剪贴板</title>
+    <link rel="shortcut icon" href="../static/favicon.ico" />
+    <link rel="stylesheet" href="../static/materialize.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <script src="../static/materialize.min.js"></script>
+  </head>
+  <body class="lime lighten-2">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+          <a href="/" class="waves-effect waves-light btn center"
+            ><i class="material-icons left">arrow_back</i>返回文件列表</a
+          >
+        </div>
+        {% if lines|length >0 %}
+        <div class="card red lighten-4">
+          <div class="card-content">
+            <p>
+              {% for text in lines %}
+              <span class="text">{{text}}<br /></span>
+              {% endfor %}
+            </p>
+            <br />
+            <button
+              class="waves-effect waves-light btn"
+              type="button"
+              onclick="copyToClip()"
+            >
+              复制到剪贴板
+              <i class="material-icons right">assignment</i>
+            </button>
+          </div>
+        </div>
+        {% endif %}
+        <div class="card blue lighten-5">
+          <div class="card-action">
+            <form method="post">
+              <div class="row">
+                <div class="input-field col s12">
+                  <textarea
+                    id="textarea"
+                    class="materialize-textarea"
+                    name="input"
+                  ></textarea>
+                  <label for="textarea">输入文本</label>
+                </div>
+                <button class="waves-effect waves-light btn" type="submit">
+                  提交文本
+                  <i class="material-icons right">send</i>
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="/clear" class="waves-effect waves-light btn center"
+                  >清空文本</a
+                >
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function copyToClip() {
+        let contents = "";
+        let spans = document.querySelectorAll(".text");
+        spans.forEach((span) => {
+          contents += span.textContent;
+        });
+        const textarea = document.createElement("textarea");
+        textarea.value = contents;
+        document.body.appendChild(textarea);
+        textarea.select();
+        if (document.execCommand("copy")) {
+          document.execCommand("copy");
+        }
+        document.body.removeChild(textarea);
+        alert("复制成功!");
+      }
+    </script>
+  </body>
+</html>
