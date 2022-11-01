@@ -35,6 +35,13 @@ def delete(file):
     return redirect(url_for('index'))
 
 
+@app.route('/delete_all')
+def delete_all():
+    for file in os.listdir(storage):
+        os.remove(f'{storage}/{file}')
+    return redirect(url_for('index'))
+
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
@@ -60,7 +67,6 @@ def upload():
 def clipboard():
     if request.method == 'POST':
         with open('clipboard/text.txt', 'w', encoding='utf-8') as f:
-            print(request.form['input'].split('\r'))
             f.writelines(request.form['input'].split('\r'))
         return redirect(request.url)
     with open('clipboard/text.txt', 'r', encoding='utf-8') as f:
