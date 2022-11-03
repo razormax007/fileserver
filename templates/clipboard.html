@@ -12,6 +12,11 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
     />
     <script src="../static/materialize.min.js"></script>
+    <style>
+      p {
+        white-space: pre-wrap;
+      }
+    </style>
   </head>
   <body class="lime lighten-2">
     <div class="section no-pad-bot">
@@ -21,14 +26,10 @@
             ><i class="material-icons left">arrow_back</i>返回文件列表</a
           >
         </div>
-        {% if lines|length >0 %}
+        {% if lines|length > 0 %}
         <div class="card red lighten-4">
           <div class="card-content">
-            <p>
-              {% for text in lines %}
-              <span class="text">{{text}}<br /></span>
-              {% endfor %}
-            </p>
+            <p id="text">{% for text in lines %}{{text}}{% endfor %}</p>
             <br />
             <button
               class="waves-effect waves-light btn"
@@ -59,11 +60,16 @@
                     <i class="material-icons right">content_paste</i>
                   </button>
                 </div>
+                {% if lines|length > 0 %}
                 <div class="col s6">
-                  <a href="/clear" class="waves-effect waves-light btn right"
+                  <a
+                    href="/clear"
+                    class="waves-effect waves-light btn right"
+                    onclick="return confirm('确定要清空文本？')"
                     ><i class="material-icons right">backspace</i>清空文本</a
                   >
                 </div>
+                {% endif %}
               </div>
             </form>
           </div>
@@ -72,18 +78,11 @@
     </div>
     <script>
       function copyToClip() {
-        let contents = "";
-        let spans = document.querySelectorAll(".text");
-        spans.forEach((span) => {
-          contents += span.textContent;
-        });
         const textarea = document.createElement("textarea");
-        textarea.value = contents;
+        textarea.value = document.getElementById("text").textContent;
         document.body.appendChild(textarea);
         textarea.select();
-        if (document.execCommand("copy")) {
-          document.execCommand("copy");
-        }
+        document.execCommand("copy");
         document.body.removeChild(textarea);
         alert("复制成功!");
       }

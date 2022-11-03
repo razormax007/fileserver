@@ -28,7 +28,12 @@
                 <div class="file-field input-field">
                   <div class="waves-effect waves-light btn">
                     <span>选择文件</span>
-                    <input type="file" name="files" multiple />
+                    <input
+                      type="file"
+                      name="files"
+                      multiple
+                      onchange="getStatus(this.value)"
+                    />
                   </div>
                   <div class="file-path-wrapper">
                     <input
@@ -38,7 +43,11 @@
                     />
                   </div>
                 </div>
-                <button class="waves-effect waves-light btn" type="submit">
+                <button
+                  id="upload"
+                  class="waves-effect waves-light btn disabled"
+                  type="submit"
+                >
                   上传
                   <i class="material-icons right">send</i>
                 </button>
@@ -48,5 +57,15 @@
         </div>
       </div>
     </div>
+    <script>
+      function getStatus(value) {
+        const upload = document.getElementById("upload");
+        if (value != "") {
+          upload.classList.remove("disabled");
+        } else {
+          upload.classList.add("disabled");
+        }
+      }
+    </script>
   </body>
 </html>
