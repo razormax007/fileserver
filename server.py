@@ -66,8 +66,10 @@ def upload():
 @app.route('/clipboard', methods=['GET', 'POST'])
 def clipboard():
     if request.method == 'POST':
-        with open('clipboard/text.txt', 'w', encoding='utf-8') as f:
-            f.writelines(request.form['input'].split('\r'))
+        input = request.form['input'].split('\r')
+        input.append('\n')
+        with open('clipboard/text.txt', 'a', encoding='utf-8') as f:
+            f.writelines(input)
         return redirect(request.url)
     with open('clipboard/text.txt', 'r', encoding='utf-8') as f:
         lines = f.readlines()
