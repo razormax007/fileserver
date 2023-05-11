@@ -4,6 +4,7 @@ from datetime import datetime
 import zipfile
 from flask import Flask, flash, request, redirect, url_for, render_template, send_file, send_from_directory
 from werkzeug.utils import secure_filename
+from pypinyin import lazy_pinyin
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -70,7 +71,7 @@ def upload():
                 flash('No selected file')
                 continue
             if file and is_valid(file.filename):
-                filename = secure_filename(file.filename)
+                filename = secure_filename(''.join(lazy_pinyin(file.filename)))
                 file.save(os.path.join(storage_path, filename))
                 counter += 1
         if counter > 0:
