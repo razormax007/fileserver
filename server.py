@@ -22,6 +22,9 @@ def is_valid(filename):
 @app.route('/')
 def index():
     files = os.listdir(storage_path)
+    for file in files:
+        if not is_valid(file):
+            files.remove(file)
     return render_template("index.html", storage=storage_path, files=files, os=os, datetime=datetime, stat=stat)
 
 
